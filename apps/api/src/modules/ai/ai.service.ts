@@ -41,8 +41,7 @@ export class AiService {
       .limit(1);
 
     if (!enrollment && !authoredCourse) {
-      // In development mode allow questions to demo courses
-      this.logger.warn(`User ${userId} querying AI tutor without active enrollment for course ${dto.courseId}`);
+      throw new ForbiddenException('You must be enrolled in this course to consult the AI Tutor');
     }
 
     // 2. Call FastAPI Service
