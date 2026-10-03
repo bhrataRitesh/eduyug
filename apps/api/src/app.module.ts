@@ -6,6 +6,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
 import { MediaModule } from './modules/media/media.module';
 import { CommerceModule } from './modules/commerce/commerce.module';
 import { LearningModule } from './modules/learning/learning.module';
+import { AiModule } from './modules/ai/ai.module';
 import * as path from 'path';
 
 @Module({
@@ -23,6 +24,7 @@ import * as path from 'path';
     MediaModule,
     CommerceModule,
     LearningModule,
+    AiModule,
   ],
 })
 export class AppModule {}
