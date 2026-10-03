@@ -114,6 +114,7 @@ export interface SectionSummary {
 export interface CourseDetail {
   id: string;
   instructorId: string;
+  instructorName?: string;
   categoryId?: string | null;
   title: string;
   slug: string;
@@ -127,6 +128,73 @@ export interface CourseDetail {
   difficultyLevel: string;
   status: CourseStatus;
   sections?: SectionSummary[];
+}
+
+export interface CourseCardSummary {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle?: string | null;
+  thumbnailUrl?: string | null;
+  priceInr: string;
+  salePriceInr?: string | null;
+  language: string;
+  difficultyLevel: string;
+  status: CourseStatus;
+  instructorName: string;
+  totalLessons: number;
+  totalDurationSeconds: number;
+}
+
+export interface CreateCourseDto {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  categoryId?: string;
+  priceInr?: number;
+  language?: string;
+  difficultyLevel?: string;
+}
+
+export interface UpdateCourseDto {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  categoryId?: string;
+  priceInr?: number;
+  salePriceInr?: number;
+  language?: string;
+  difficultyLevel?: string;
+  thumbnailUrl?: string;
+  trailerVideoUrl?: string;
+}
+
+export interface CreateSectionDto {
+  title: string;
+  orderIndex?: number;
+}
+
+export interface UpdateSectionDto {
+  title?: string;
+  orderIndex?: number;
+}
+
+export interface CreateLessonDto {
+  title: string;
+  lessonType?: LessonType;
+  contentText?: string;
+  durationSeconds?: number;
+  isPreview?: boolean;
+  orderIndex?: number;
+}
+
+export interface UpdateLessonDto {
+  title?: string;
+  lessonType?: LessonType;
+  contentText?: string;
+  durationSeconds?: number;
+  isPreview?: boolean;
+  orderIndex?: number;
 }
 
 // ------------------------------------------------------------------------------

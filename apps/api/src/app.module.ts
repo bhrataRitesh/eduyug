@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './modules/database/database.module';
 import { IdentityModule } from './modules/identity/identity.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
 import * as path from 'path';
 
 @Module({
@@ -15,6 +16,7 @@ import * as path from 'path';
     }),
     DatabaseModule,
     IdentityModule,
+    CatalogModule,
   ],
 })
 export class AppModule {}
