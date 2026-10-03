@@ -492,6 +492,8 @@ export class CatalogService {
           durationSeconds: l.durationSeconds,
           isPreview: l.isPreview,
           orderIndex: l.orderIndex,
+          contentText: l.contentText,
+          mediaAssetId: l.mediaAssetId,
         })),
       });
     }

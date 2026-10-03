@@ -12,6 +12,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/s3-request-presigner": "^3.1146.0",
     "@eduyug/database": "workspace:*",
     "@eduyug/shared-types": "workspace:*",
     "@nestjs/bullmq": "^10.2.1",

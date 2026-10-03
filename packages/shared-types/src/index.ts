@@ -29,6 +29,33 @@ export enum MediaStatus {
   FAILED = 'failed',
 }
 
+export interface PresignUploadDto {
+  filename: string;
+  contentType: string;
+  fileSize: number;
+  lessonId?: string;
+}
+
+export interface PresignUploadResponse {
+  mediaAssetId: string;
+  uploadUrl: string;
+  key: string;
+}
+
+export interface ConfirmUploadDto {
+  mediaAssetId: string;
+}
+
+export interface MediaAssetDetail {
+  id: string;
+  status: MediaStatus;
+  durationSeconds: number;
+  hlsMasterPlaylistUrl?: string | null;
+  resolutions: string[];
+  thumbnailSpriteUrl?: string | null;
+  audioS3Key?: string | null;
+}
+
 export enum OrderStatus {
   PENDING = 'pending',
   COMPLETED = 'completed',
@@ -101,6 +128,8 @@ export interface LessonSummary {
   durationSeconds: number;
   isPreview: boolean;
   orderIndex: number;
+  contentText?: string | null;
+  mediaAssetId?: string | null;
 }
 
 export interface SectionSummary {

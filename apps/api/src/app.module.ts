@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './modules/database/database.module';
 import { IdentityModule } from './modules/identity/identity.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
+import { MediaModule } from './modules/media/media.module';
 import * as path from 'path';
 
 @Module({
@@ -17,6 +18,7 @@ import * as path from 'path';
     DatabaseModule,
     IdentityModule,
     CatalogModule,
+    MediaModule,
   ],
 })
 export class AppModule {}
