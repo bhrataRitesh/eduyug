@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Eye,
   Send,
+  UploadCloud,
 } from 'lucide-react';
 import { fetchApi } from '../../../../../lib/api';
 import { CourseDetail, LessonType, CourseStatus } from '@eduyug/shared-types';
@@ -36,6 +37,59 @@ export default function CourseCurriculumBuilderPage() {
   const [newLessonDuration, setNewLessonDuration] = useState(600); // 10 mins
   const [newLessonIsPreview, setNewLessonIsPreview] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [uploadingLessonId, setUploadingLessonId] = useState<string | null>(null);
+
+  const handleUploadVideo = async (e: React.ChangeEvent<HTMLInputElement>, lessonId: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingLessonId(lessonId);
+    setError(null);
+
+    // 1. Get presigned upload URL from backend
+    const { data: presignData, error: presignError } = await fetchApi<{
+      mediaAssetId: string;
+      uploadUrl: string;
+    }>('/api/v1/media/presign-upload', {
+      method: 'POST',
+      body: JSON.stringify({
+        filename: file.name,
+        contentType: file.type || 'video/mp4',
+        fileSize: file.size,
+        lessonId,
+      }),
+    });
+
+    if (presignError || !presignData) {
+      setUploadingLessonId(null);
+      setError(presignError || 'Failed to generate upload URL');
+      return;
+    }
+
+    try {
+      // 2. Direct upload to S3 / mock endpoint
+      await fetch(presignData.uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type || 'video/mp4',
+        },
+      });
+
+      // 3. Confirm upload and trigger HLS packaging
+      await fetchApi('/api/v1/media/confirm-upload', {
+        method: 'POST',
+        body: JSON.stringify({ mediaAssetId: presignData.mediaAssetId }),
+      });
+
+      setSuccessMsg('Video uploaded successfully and transcoded to HLS ABR!');
+      loadCourse();
+    } catch (err: any) {
+      setError(err?.message || 'Video upload failed');
+    } finally {
+      setUploadingLessonId(null);
+    }
+  };
 
   const loadCourse = async () => {
     setLoading(true);
@@ -354,6 +408,19 @@ export default function CourseCurriculumBuilderPage() {
                     </div>
 
                     <div className="flex items-center gap-3 text-slate-400">
+                      {lesson.lessonType === LessonType.VIDEO && (
+                        <label className="cursor-pointer px-2.5 py-1 rounded-lg bg-brand-600/20 hover:bg-brand-600/30 text-brand-300 border border-brand-500/30 flex items-center gap-1.5 transition-colors">
+                          <UploadCloud className="w-3.5 h-3.5" />
+                          <span>{uploadingLessonId === lesson.id ? 'Uploading...' : 'Upload Video'}</span>
+                          <input
+                            type="file"
+                            accept="video/mp4,video/quicktime,video/webm"
+                            className="hidden"
+                            disabled={uploadingLessonId === lesson.id}
+                            onChange={(e) => handleUploadVideo(e, lesson.id)}
+                          />
+                        </label>
+                      )}
                       <span>{Math.round(lesson.durationSeconds / 60)} min</span>
                       <button
                         onClick={() => handleDeleteLesson(section.id, lesson.id)}
