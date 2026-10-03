@@ -47,17 +47,18 @@ This document outlines the deployment strategy, environment configuration, and h
 
 ## Recommended Deployment Architectures
 
-### Option 1: Modern Cloud PaaS (Recommended for Portfolio)
+### Option 1: 100% Free Tier Stack (Recommended for Portfolio)
 
-This setup is fast to deploy, has generous free/low-cost tiers, and requires zero server maintenance.
+This setup is **completely free (₹0 / $0 per month)**, requires no credit card for the primary services, and is ideal for showcasing on LinkedIn and resumes.
 
-| Layer | Recommended Provider | Why for Portfolio | Estimated Cost |
+| Component | Platform | Free Tier Limits | Why It's Best |
 |---|---|---|---|
-| **Frontend** | [Vercel](https://vercel.com/) | Native Next.js 14 optimizations, automatic SSL, preview deployments | Free |
-| **Backend API** | [Render](https://render.com/) or [Railway](https://railway.app/) | Managed Node.js containers, background workers, zero-downtime deploys | $5–$7/mo |
-| **Database** | [Neon](https://neon.tech/) or [Supabase](https://supabase.com/) | Managed PostgreSQL 16 with native `pgvector` extension pre-installed | Free tier |
-| **Cache & Redis** | [Upstash](https://upstash.com/) or Railway Redis | Serverless Redis, zero idle cost, BullMQ compatible | Free tier |
-| **Video & Media** | [Cloudflare R2](https://www.cloudflare.com/products/r2/) or AWS S3 | S3-compatible API, **zero egress bandwidth fees** | Free / pennies |
+| **Frontend** | [Vercel](https://vercel.com/) | Unlimited deployments, 100GB bandwidth | Native Next.js 14 support, instant preview URLs, automatic HTTPS |
+| **Backend API** | [Render](https://render.com/) or [Koyeb](https://www.koyeb.com/) | 750 free hrs/mo (Render) / Free micro (Koyeb) | Connects directly to GitHub repo, auto-deploy on `git push` |
+| **Database** | [Neon](https://neon.tech/) or [Supabase](https://supabase.com/) | 0.5GB storage, 100% free tier | Managed PostgreSQL 16 with **`pgvector` pre-installed** |
+| **Redis** | [Upstash](https://upstash.com/) | 10,000 commands/day free | Serverless Redis, standard TCP + REST, zero idle sleep |
+| **Video & Media** | [Cloudflare R2](https://www.cloudflare.com/products/r2/) | 10GB storage/mo, **0 egress fees** | Full AWS S3 SDK compatibility with zero egress bills |
+| **Keep-Alive Cron** | [UptimeRobot](https://uptimerobot.com/) | 50 monitors free (5-min intervals) | Pings your free API so it stays warm and never spins down |
 
 #### Step-by-Step PaaS Deployment:
 
