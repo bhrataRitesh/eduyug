@@ -145,61 +145,88 @@ export default function CoursesCatalogPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
-            <Link
-              key={course.id}
-              href={`/courses/${course.slug}`}
-              className="glass-card rounded-2xl p-6 flex flex-col justify-between group hover:border-brand-500/40"
-            >
-              <div>
-                {/* Badge Header */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <span className="text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-md bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                    {course.difficultyLevel}
-                  </span>
-                  <div className="flex items-center gap-1 text-xs text-accent-cyan font-medium">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>AI Tutor Enabled</span>
+          {courses.map((course, idx) => {
+            const gradients = [
+              'from-indigo-600/40 via-purple-600/20 to-slate-900',
+              'from-cyan-600/40 via-blue-600/20 to-slate-900',
+              'from-emerald-600/40 via-teal-600/20 to-slate-900',
+              'from-amber-600/40 via-rose-600/20 to-slate-900',
+            ];
+            const cardGrad = gradients[idx % gradients.length];
+
+            const diffColor =
+              course.difficultyLevel === 'advanced'
+                ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                : course.difficultyLevel === 'intermediate'
+                ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+                : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+
+            return (
+              <Link
+                key={course.id}
+                href={`/courses/${course.slug}`}
+                className="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group border border-slate-800 hover:border-brand-500/40"
+              >
+                <div>
+                  {/* Card Visual Banner */}
+                  <div className={`h-36 w-full bg-gradient-to-tr ${cardGrad} p-4 flex flex-col justify-between relative border-b border-slate-800/80`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full border ${diffColor}`}>
+                        {course.difficultyLevel}
+                      </span>
+                      <div className="inline-flex items-center gap-1 text-[11px] text-accent-cyan font-semibold px-2 py-0.5 rounded bg-black/40 backdrop-blur-sm border border-accent-cyan/30">
+                        <Sparkles className="w-3 h-3" />
+                        <span>AI Tutor</span>
+                      </div>
+                    </div>
+
+                    <div className="text-white/80 font-mono text-xs flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
+                      <span>{course.language}</span>
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="p-6">
+                    <h2 className="text-base font-bold text-white group-hover:text-brand-300 transition-colors line-clamp-2 mb-2 leading-snug">
+                      {course.title}
+                    </h2>
+
+                    <p className="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+                      {course.subtitle || 'Learn core concepts and real-world architectures with guided hands-on modules.'}
+                    </p>
                   </div>
                 </div>
 
-                <h2 className="text-lg font-bold text-white group-hover:text-brand-300 transition-colors line-clamp-2 mb-2 leading-snug">
-                  {course.title}
-                </h2>
-
-                <p className="text-xs text-slate-400 line-clamp-2 mb-6 leading-relaxed">
-                  {course.subtitle || 'Learn core concepts and real-world architectures with guided hands-on modules.'}
-                </p>
-              </div>
-
-              <div>
-                {/* Meta details */}
-                <div className="flex items-center gap-4 text-xs text-slate-400 mb-4 pt-4 border-t border-slate-800">
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-slate-500" />
-                    <span>{course.totalLessons} Lessons</span>
+                <div className="px-6 pb-6 pt-0">
+                  {/* Meta details */}
+                  <div className="flex items-center gap-4 text-xs text-slate-400 mb-4 pt-3 border-t border-slate-800/80">
+                    <div className="flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5 text-slate-500" />
+                      <span>{course.totalLessons} Lessons</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      <span>{formatHours(course.totalDurationSeconds)}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-slate-500" />
-                    <span>{formatHours(course.totalDurationSeconds)}</span>
-                  </div>
-                </div>
 
-                {/* Price and Instructor */}
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-slate-400">By {course.instructorName}</span>
-                  <div className="flex items-baseline gap-2">
-                    {course.salePriceInr && (
-                      <span className="text-xs line-through text-slate-500">₹{course.priceInr}</span>
-                    )}
-                    <span className="text-base font-extrabold text-white">
-                      ₹{course.salePriceInr || course.priceInr}
-                    </span>
+                  {/* Price and Instructor */}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-xs text-slate-400">By {course.instructorName}</span>
+                    <div className="flex items-baseline gap-2">
+                      {course.salePriceInr && (
+                        <span className="text-xs line-through text-slate-500">₹{course.priceInr}</span>
+                      )}
+                      <span className="text-base font-extrabold text-white">
+                        ₹{course.salePriceInr || course.priceInr}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

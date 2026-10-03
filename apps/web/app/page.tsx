@@ -1,78 +1,300 @@
 import React from 'react';
 import Link from 'next/link';
-import { Sparkles, ArrowRight, Play, Brain, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import {
+  Sparkles,
+  ArrowRight,
+  Play,
+  PlayCircle,
+  Brain,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  Users,
+  Star,
+  Terminal,
+  Layers,
+  ChevronRight,
+  Code2,
+} from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="relative overflow-hidden">
-      {/* Background Glow Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-brand-600/20 via-accent-cyan/10 to-transparent blur-3xl pointer-events-none -z-10" />
+    <div className="relative overflow-hidden bg-[#080C14]">
+      {/* Background Ambient Glow Orbs */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[600px] bg-gradient-to-b from-brand-600/25 via-accent-cyan/15 to-transparent blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-[800px] -left-48 w-96 h-96 bg-brand-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+      <div className="absolute top-[1200px] -right-48 w-96 h-96 bg-accent-cyan/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-medium text-brand-300 mb-8 backdrop-blur-sm">
-          <Sparkles className="w-3.5 h-3.5 text-accent-cyan" />
-          <span>Next-Generation AI Tutoring Built Right Into Every Lesson</span>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 text-center">
+        {/* Release / Innovation Pill */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs font-semibold text-brand-300 mb-8 backdrop-blur-md shadow-inner shadow-brand-500/10 hover:border-brand-500/40 transition-colors">
+          <Sparkles className="w-3.5 h-3.5 text-accent-cyan animate-pulse" />
+          <span>Real-time pgvector RAG + Adaptive Multi-Bitrate HLS</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-4xl mx-auto leading-[1.1] mb-6">
-          Learn Faster with{' '}
-          <span className="bg-gradient-to-r from-brand-400 via-accent-cyan to-brand-300 bg-clip-text text-transparent">
-            AI-Augmented
+        {/* Main Headline */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.08] mb-6">
+          Architect Real Systems.{' '}
+          <span className="bg-gradient-to-r from-brand-400 via-accent-cyan to-brand-200 bg-clip-text text-transparent">
+            Learn with an In-Browser
           </span>{' '}
-          Engineering Courses
+          AI Tutor.
         </h1>
 
-        <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          High-definition video courses paired with an intelligent RAG tutor that answers questions with exact video timestamp citations.
+        <p className="text-base sm:text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          Industrial-grade video courses covering distributed systems, Kafka, and cloud scale. Ask technical questions anytime—our RAG tutor cites the exact video timestamp.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+        {/* Primary CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-16">
           <Link
             href="/courses"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-white bg-brand-600 hover:bg-brand-500 shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 shadow-lg shadow-brand-600/30 hover:shadow-brand-500/50 transition-all flex items-center justify-center gap-2 group hover:scale-[1.02]"
           >
-            <span>Explore Catalog</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Explore Courses</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
-            href="/auth/register"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-slate-200 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 transition-all flex items-center justify-center gap-2"
+            href="/courses/distributed-systems-kafka-go"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold text-slate-200 bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 transition-all flex items-center justify-center gap-2 group"
           >
-            <span>Teach on EduYug</span>
+            <PlayCircle className="w-4 h-4 text-accent-cyan" />
+            <span>Watch Preview</span>
           </Link>
         </div>
 
-        {/* Feature Highlights Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 text-left">
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="w-12 h-12 rounded-xl bg-brand-600/20 text-brand-400 flex items-center justify-center mb-4">
+        {/* Interactive Classroom Mockup Preview */}
+        <div className="relative max-w-5xl mx-auto rounded-2xl p-1 bg-gradient-to-b from-white/15 via-white/5 to-transparent shadow-2xl shadow-black/80">
+          <div className="bg-[#0B101E] rounded-xl overflow-hidden border border-slate-800 text-left">
+            {/* Window Topbar */}
+            <div className="h-10 bg-slate-950/80 border-b border-slate-800/80 px-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
+                <Terminal className="w-3 h-3 text-brand-400" />
+                <span>eduyug.com/learn/distributed-systems-kafka-go</span>
+              </div>
+              <div className="text-[10px] text-accent-cyan font-semibold px-2 py-0.5 rounded bg-accent-cyan/10 border border-accent-cyan/30">
+                1080p ABR • Live
+              </div>
+            </div>
+
+            {/* Split Classroom Preview: Video on Left, AI Tutor on Right */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px]">
+              {/* Video Simulated Stage */}
+              <div className="lg:col-span-7 bg-slate-950 p-6 flex flex-col justify-between relative group">
+                <div className="space-y-1">
+                  <div className="text-xs font-semibold text-accent-cyan uppercase tracking-wider">Module 1 • Lesson 2</div>
+                  <h3 className="text-base font-bold text-white">Kafka Consumer Group Protocol & Offset Commit Semantics</h3>
+                </div>
+
+                <div className="my-8 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-brand-600/90 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 group-hover:scale-110 transition-transform">
+                    <Play className="w-7 h-7 fill-white ml-1" />
+                  </div>
+                </div>
+
+                {/* Simulated scrub bar */}
+                <div className="space-y-2">
+                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-brand-500 h-full w-2/5 rounded-full" />
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                    <span>02:25 / 08:10</span>
+                    <span className="text-brand-300">Offset Commit Analysis</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Tutor Chat Simulated Stage */}
+              <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-slate-800 bg-[#0E1528] p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-brand-600/30 border border-brand-500/40 flex items-center justify-center text-brand-300">
+                      <Brain className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-white">AI Tutor Assistant</div>
+                      <div className="text-[10px] text-emerald-400 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Connected to Video Transcripts</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sample Chat Message with Clickable Citation */}
+                <div className="space-y-3 my-4">
+                  <div className="p-3 rounded-xl bg-brand-600/20 border border-brand-500/30 text-xs text-brand-100 ml-4">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Learner</span>
+                    Where is consumer group offset committing explained?
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-200 mr-4 space-y-2">
+                    <span className="text-[10px] uppercase font-bold text-accent-cyan block">AI Tutor • 142ms</span>
+                    <p className="leading-relaxed">
+                      The instructor explains manual vs automatic offset committing and duplicate processing risks at
+                    </p>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-brand-500/20 border border-brand-500/40 text-brand-300 font-bold text-[11px] cursor-pointer hover:bg-brand-500/30 transition-all">
+                      <PlayCircle className="w-3.5 h-3.5 text-accent-cyan" />
+                      <span>Jump to [02:25]</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Input box */}
+                <div className="pt-2 border-t border-slate-800">
+                  <div className="h-9 px-3 bg-slate-950 border border-slate-700/80 rounded-lg text-xs text-slate-400 flex items-center justify-between">
+                    <span>Ask about this lesson...</span>
+                    <div className="px-2 py-0.5 bg-brand-600 rounded text-[10px] font-bold text-white">Ask</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Metrics Counter Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10 border-t border-slate-800/80 max-w-4xl mx-auto">
+          <div>
+            <div className="text-3xl font-extrabold text-white mb-1">15,000+</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Active Engineers</div>
+          </div>
+          <div>
+            <div className="text-3xl font-extrabold text-accent-cyan mb-1">4.9 / 5.0</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Average Course Rating</div>
+          </div>
+          <div>
+            <div className="text-3xl font-extrabold text-accent-emerald mb-1">&lt; 150ms</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">RAG Vector Latency</div>
+          </div>
+          <div>
+            <div className="text-3xl font-extrabold text-brand-300 mb-1">99.9%</div>
+            <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">CDN Availability</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Course Spotlight Banner */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden glass-panel border border-brand-500/30">
+          <div className="absolute -right-20 -top-20 w-80 h-80 bg-brand-600/20 rounded-full blur-[80px] pointer-events-none" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30 text-xs font-semibold">
+                <Star className="w-3.5 h-3.5 fill-brand-300" />
+                <span>Featured Masterclass</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
+                Production-Grade Distributed Systems with Kafka & Go
+              </h2>
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+                Master event streaming, consumer group rebalancing, and exactly-once semantics at scale. Includes complete source code, Protocol Buffers schemas, and AI RAG assistance.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent-emerald" /> 4 In-Depth Lessons</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent-emerald" /> 33m High-Bitrate Video</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent-emerald" /> Interactive AI Tutor</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-accent-emerald" /> Certificate of Completion</span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 bg-slate-900/90 rounded-2xl p-6 border border-slate-700/80 text-center space-y-4">
+              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold">One-time Enrollment</div>
+              <div className="flex items-baseline justify-center gap-3">
+                <span className="text-3xl font-extrabold text-white">₹2,999</span>
+                <span className="text-sm line-through text-slate-500">₹4,999</span>
+                <span className="text-xs font-bold text-accent-emerald px-2 py-0.5 rounded bg-accent-emerald/10 border border-accent-emerald/20">40% OFF</span>
+              </div>
+              <Link
+                href="/courses/distributed-systems-kafka-go"
+                className="w-full py-3 px-6 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-md shadow-brand-600/30 transition-all flex items-center justify-center gap-2"
+              >
+                <span>Enroll Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <div className="text-[11px] text-slate-500">
+                Instant access via Razorpay • 30-day money-back guarantee
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            Engineered for Modern Developers
+          </h2>
+          <p className="text-sm sm:text-base text-slate-400">
+            Every feature in EduYug is built to eliminate friction and maximize technical understanding.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="glass-card p-8 rounded-2xl relative overflow-hidden group">
+            <div className="w-12 h-12 rounded-xl bg-brand-600/20 text-brand-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Brain className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Contextual AI Tutor</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Contextual AI Tutor</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Ask deep technical questions anytime. Our RAG engine searches exact lesson transcripts and jumps straight to the timestamp.
+              No generic answers. Queries are matched against 1536-dimensional embeddings of actual transcripts, returning precise timestamp badges you can click to jump.
             </p>
           </div>
 
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="w-12 h-12 rounded-xl bg-accent-cyan/20 text-accent-cyan flex items-center justify-center mb-4">
+          <div className="glass-card p-8 rounded-2xl relative overflow-hidden group">
+            <div className="w-12 h-12 rounded-xl bg-accent-cyan/20 text-accent-cyan flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Zap className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Adaptive HLS Streaming</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Adaptive HLS Streaming</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Silky smooth 1080p playback encoded across multi-bitrate ladders, cached worldwide on CloudFront CDN edges.
+              Direct S3 presigned multipart ingestion and multi-bitrate encoding (360p to 1080p). Zero buffer delays on mobile, desktop, or poor network conditions.
             </p>
           </div>
 
-          <div className="glass-card p-6 rounded-2xl">
-            <div className="w-12 h-12 rounded-xl bg-accent-emerald/20 text-accent-emerald flex items-center justify-center mb-4">
+          <div className="glass-card p-8 rounded-2xl relative overflow-hidden group">
+            <div className="w-12 h-12 rounded-xl bg-accent-emerald/20 text-accent-emerald flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-white mb-2">Seamless Razorpay Checkout</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Double-Entry Financials</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Instant UPI and card checkout backed by an immutable double-entry ledger and transparent instructor payouts.
+              Razorpay checkout with cryptographic HMAC-SHA256 signature verification and automated double-entry ledger allocation between platform and instructor.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Bottom Banner */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="rounded-3xl p-10 sm:p-16 bg-gradient-to-r from-brand-900/60 via-slate-900 to-accent-cyan/20 border border-brand-500/30 text-center space-y-6 relative overflow-hidden">
+          <div className="w-12 h-12 rounded-2xl bg-brand-600/30 border border-brand-500/40 flex items-center justify-center mx-auto text-brand-300">
+            <Code2 className="w-6 h-6" />
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white max-w-2xl mx-auto leading-tight">
+            Ready to Accelerate Your Engineering Career?
+          </h2>
+          <p className="text-base text-slate-300 max-w-xl mx-auto">
+            Join thousands of developers leveling up on distributed architectures, high-concurrency systems, and AI engineering.
+          </p>
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/courses"
+              className="px-8 py-3.5 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-xl shadow-brand-600/40 transition-all flex items-center gap-2"
+            >
+              <span>Explore Course Catalog</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/auth/register"
+              className="px-8 py-3.5 rounded-xl font-semibold text-slate-300 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 transition-all"
+            >
+              <span>Create Account</span>
+            </Link>
           </div>
         </div>
       </section>
