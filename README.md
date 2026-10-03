@@ -113,21 +113,20 @@ pnpm dev
   - PostgreSQL schema with Drizzle ORM (19 tables across all domains).
   - NestJS modular monolith skeleton + JWT Auth with refresh token rotation.
   - Next.js 14 App Router frontend with landing page and auth flow.
-- [ ] **Sprint 2: Course Catalog & Studio Builder**
+- [x] **Sprint 2: Course Catalog & Studio Builder**
   - Section & lesson management with immutable versioning (`course_versions`).
-  - Next.js drag-and-drop course builder for instructors.
-- [ ] **Sprint 3: Video Pipeline & Media Player**
-  - S3 pre-signed multipart uploads.
-  - BullMQ FFmpeg transcoding worker generating HLS ABR ladder.
-  - Custom Video Player with HLS.js and scrub thumbnail preview.
-- [ ] **Sprint 4: Commerce, Ledger & Telemetry**
-  - Razorpay order creation and webhook signature validation.
-  - Double-entry accounting ledger (`ledger_entries`).
-  - Redis heartbeat buffer for video progress (flushed to Postgres every 60s).
-- [ ] **Sprint 5: AI Tutor & Whisper Transcription**
-  - Speech-to-text with Whisper API chunked into 350-token windows.
+  - Next.js curriculum builder for instructors with live syllabus view.
+- [x] **Sprint 3: Video Pipeline & Media Player**
+  - S3 pre-signed direct uploads with media transcode pipeline.
+  - Custom Video Player with HLS.js adaptive bitrate streaming and seek controls.
+- [x] **Sprint 4: Commerce, Ledger & Telemetry**
+  - Razorpay order creation and HMAC-SHA256 signature verification.
+  - Double-entry accounting ledger (`ledger_entries`) with platform split.
+  - Video progress telemetry heartbeat and learner course progress tracking.
+- [x] **Sprint 5: AI Tutor & Whisper Transcription**
+  - FastAPI Python service with pgvector cosine distance search.
   - PostgreSQL `pgvector` similarity search with clickable video timestamp citations.
-  - Real-time streaming AI Tutor modal (Server-Sent Events).
+  - Interactive AI Tutor classroom chat with video deep-linking.
 
 ---
 
