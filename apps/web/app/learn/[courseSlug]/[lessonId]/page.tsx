@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import VideoPlayer from '../../../../components/VideoPlayer';
 import { fetchApi } from '../../../../lib/api';
-import { CourseDetail, LessonType, LessonSummary } from '@eduyug/shared-types';
+import { CourseDetail, LessonType, LessonSummary, RagQueryResponse } from '@eduyug/shared-types';
 
 export default function LessonClassroomPage() {
   const params = useParams();
@@ -33,8 +33,9 @@ export default function LessonClassroomPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'aitutor'>('aitutor');
   const [completedLessons, setCompletedLessons] = useState<Record<string, boolean>>({});
 
-  // AI Tutor Mock chat for testing interactive deep-link citations
+  // AI Tutor chat with real RAG retrieval & interactive citations
   const [chatInput, setChatInput] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
   const [messages, setMessages] = useState<
     { role: 'user' | 'assistant'; text: string; citationTimestamp?: number; citationLabel?: string }[]
   >([
@@ -85,26 +86,56 @@ export default function LessonClassroomPage() {
     setSeekTarget(seconds);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || aiLoading) return;
 
-    const userText = chatInput;
+    const userText = chatInput.trim();
     setMessages((prev) => [...prev, { role: 'user', text: userText }]);
     setChatInput('');
+    setAiLoading(true);
 
-    // Simulated RAG response with citation
-    setTimeout(() => {
+    const { data, error } = await fetchApi<RagQueryResponse>('/api/v1/ai/tutor', {
+      method: 'POST',
+      body: JSON.stringify({
+        courseId: course?.id || 'demo-1',
+        lessonId: activeLesson?.id,
+        query: userText,
+      }),
+    });
+
+    setAiLoading(false);
+
+    if (data) {
+      const firstCitation = data.citations?.[0];
+      let startM = 0;
+      let startS = 0;
+      if (firstCitation) {
+        startM = Math.floor(firstCitation.startTimeSeconds / 60);
+        startS = Math.floor(firstCitation.startTimeSeconds % 60);
+      }
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          text: `Based on the lesson transcript for "${activeLesson?.title || 'this module'}", the core concept is covered directly at `,
-          citationTimestamp: 60,
-          citationLabel: '[01:00]',
+          text: data.answer,
+          citationTimestamp: firstCitation?.startTimeSeconds,
+          citationLabel: firstCitation
+            ? `[${startM < 10 ? '0' : ''}${startM}:${startS < 10 ? '0' : ''}${startS}]`
+            : undefined,
         },
       ]);
-    }, 600);
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text:
+            error ||
+            'I encountered an issue querying the course knowledge base. Please verify you are enrolled or try again.',
+        },
+      ]);
+    }
   };
 
   const allLessons: LessonSummary[] = course?.sections?.flatMap((s) => s.lessons) || [];
@@ -283,6 +314,12 @@ export default function LessonClassroomPage() {
                       )}
                     </div>
                   ))}
+                  {aiLoading && (
+                    <div className="p-3.5 rounded-xl text-xs bg-slate-900/80 text-slate-400 border border-slate-800 mr-8 flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-brand-400 animate-ping" />
+                      <span>AI Tutor is querying lesson transcripts & vector embeddings...</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Input Prompt */}
@@ -290,15 +327,17 @@ export default function LessonClassroomPage() {
                   <input
                     type="text"
                     value={chatInput}
+                    disabled={aiLoading}
                     onChange={(e) => setChatInput(e.target.value)}
                     placeholder="Ask anything about this video (e.g. explain the code at 03:15)..."
-                    className="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                    className="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 disabled:opacity-50"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-md shadow-brand-600/30 transition-all"
+                    disabled={aiLoading || !chatInput.trim()}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-md shadow-brand-600/30 transition-all disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    Ask
+                    {aiLoading ? 'Thinking...' : 'Ask'}
                   </button>
                 </form>
               </div>
