@@ -60,9 +60,19 @@ export default function Navbar() {
             <span>Explore</span>
           </Link>
 
+          {user && (
+            <Link
+              href="/studio"
+              className="text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <Sparkles className="w-4 h-4 text-accent-cyan" />
+              <span>Studio</span>
+            </Link>
+          )}
+
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="text-xs px-2.5 py-1 rounded-full bg-brand-500/20 text-brand-300 font-medium border border-brand-500/30">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-brand-500/20 text-brand-300 font-medium border border-brand-500/30 capitalize">
                 {user.role}
               </span>
               <div className="flex items-center gap-2 pl-2 border-l border-slate-700">
