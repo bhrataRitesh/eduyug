@@ -115,6 +115,64 @@ export interface LearningHeartbeatDto {
   playbackRate?: number;
 }
 
+export interface CourseProgressResponse {
+  courseId: string;
+  completionPercentage: number;
+  completedLessonIds: string[];
+  lastPositionSeconds: number;
+  lastLessonId?: string;
+}
+
+export interface EnrollmentSummary {
+  enrollmentId: string;
+  courseId: string;
+  courseTitle: string;
+  courseSlug: string;
+  thumbnailUrl?: string | null;
+  enrolledAt: string;
+  completionPercentage: number;
+  totalLessons: number;
+  completedLessonsCount: number;
+}
+
+// ------------------------------------------------------------------------------
+// Commerce & Financial Ledger Types
+// ------------------------------------------------------------------------------
+
+export interface CreateOrderDto {
+  courseId: string;
+}
+
+export interface CreateOrderResponse {
+  orderId: string;
+  razorpayOrderId: string;
+  amountInr: string;
+  currency: string;
+  key: string;
+}
+
+export interface VerifyPaymentDto {
+  orderId: string;
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  razorpaySignature: string;
+}
+
+export interface VerifyPaymentResponse {
+  success: boolean;
+  enrollmentId: string;
+  courseSlug: string;
+  firstLessonId: string;
+}
+
+export interface InstructorEarningsSummary {
+  totalGrossSalesInr: string;
+  totalInstructorRevenueInr: string;
+  totalPlatformFeeInr: string;
+  totalOrdersCount: number;
+  withdrawableBalanceInr: string;
+}
+
 // ------------------------------------------------------------------------------
 // Course Catalog Types
 // ------------------------------------------------------------------------------
