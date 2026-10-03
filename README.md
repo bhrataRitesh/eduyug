@@ -131,5 +131,5 @@ pnpm dev
 
 ---
 
-## License
-MIT
+## Copyright & Ownership
+Copyright © 2026 EduYug. All rights reserved. Proprietary and confidential. Developed by Ritesh Kumar.
