@@ -1,0 +1,20 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './modules/database/database.module';
+import { IdentityModule } from './modules/identity/identity.module';
+import * as path from 'path';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        path.resolve(process.cwd(), '.env'),
+        path.resolve(process.cwd(), '../../.env'),
+      ],
+    }),
+    DatabaseModule,
+    IdentityModule,
+  ],
+})
+export class AppModule {}
