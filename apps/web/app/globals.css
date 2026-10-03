@@ -26,6 +26,25 @@ body {
   background-size: 28px 28px;
 }
 
+/* Senior UI Text Gradients */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E7FF 40%, #818CF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #C084FC 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Glassmorphism helpers */
 .glass-panel {
   background: rgba(13, 19, 33, 0.75);
@@ -43,9 +62,24 @@ body {
 
 .glass-card:hover {
   background: rgba(23, 32, 51, 0.9);
-  border-color: rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.45);
   transform: translateY(-3px);
-  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5), 0 0 20px -4px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 24px -4px rgba(99, 102, 241, 0.25);
+}
+
+.glass-card-interactive {
+  background: rgba(15, 22, 38, 0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-interactive:hover {
+  border-color: rgba(129, 140, 248, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7), 0 0 30px -5px rgba(99, 102, 241, 0.3);
 }
 
 /* Radiant glow effects */

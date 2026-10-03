@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -14,10 +16,21 @@ import {
   Terminal,
   Layers,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Code2,
+  HelpCircle,
+  Quote,
+  Cpu,
 } from 'lucide-react';
 
 export default function HomePage() {
+  const [openFaq, setOpenFaq] = useState<Record<number, boolean>>({ 0: true });
+
+  const toggleFaq = (idx: number) => {
+    setOpenFaq((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
   return (
     <div className="relative overflow-hidden bg-[#080C14]">
       {/* Background Ambient Glow Orbs */}
@@ -266,6 +279,137 @@ export default function HomePage() {
               Razorpay checkout with cryptographic HMAC-SHA256 signature verification and automated double-entry ledger allocation between platform and instructor.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Engineer Testimonials */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-800/80">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-xs font-semibold text-brand-300">
+            <Quote className="w-3.5 h-3.5 text-accent-cyan" />
+            <span>Learner Feedback</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Trusted by Senior Engineers Across Top Tech
+          </h2>
+          <p className="text-sm sm:text-base text-slate-400">
+            Engineers from high-growth tech companies use EduYug to master core infrastructure patterns.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              quote:
+                'The Kafka consumer group rebalancing and idempotent producer breakdown solved an actual high-severity latency bottleneck in our payment processing pipeline.',
+              author: 'Aakash Verma',
+              role: 'Staff Infrastructure Engineer',
+              company: 'Fintech Payments Platform',
+              initial: 'A',
+            },
+            {
+              quote:
+                'Having an in-browser AI Tutor that cites the exact video timestamp is revolutionary. I asked about Saga rollback compensation and had the 2-minute video clip in 150ms.',
+              author: 'Priya Sundaram',
+              role: 'Senior Backend Architect',
+              company: 'Logistics Unicorn',
+              initial: 'P',
+            },
+            {
+              quote:
+                'No toy Todo apps. Every single line of code is structured with real domain-driven design, Protocol Buffers, and Kubernetes manifests ready for production.',
+              author: 'Rohan Sharma',
+              role: 'Lead Platform Engineer',
+              company: 'Cloud Scale-up',
+              initial: 'R',
+            },
+          ].map((t, idx) => (
+            <div key={idx} className="glass-card p-8 rounded-2xl flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-1 text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed italic">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 pt-4 border-t border-slate-800/80">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-accent-cyan flex items-center justify-center font-bold text-white text-sm shadow-md">
+                  {t.initial}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-white">{t.author}</h4>
+                  <div className="text-[11px] text-brand-300">{t.role}</div>
+                  <div className="text-[10px] text-slate-500">{t.company}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Frequently Asked Questions Accordion */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-800/80">
+        <div className="text-center mb-14 space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-xs font-semibold text-brand-300">
+            <HelpCircle className="w-3.5 h-3.5 text-accent-cyan" />
+            <span>Got Questions?</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-sm text-slate-400">
+            Everything you need to know about curriculum access, the AI Tutor, and technical prerequisites.
+          </p>
+        </div>
+
+        <div className="space-y-3.5">
+          {[
+            {
+              q: 'Do I get lifetime access to course videos and future updates?',
+              a: 'Yes! Once you enroll in any EduYug masterclass, you receive full lifetime access to all lessons, source code repositories, and any future curriculum updates or architectural enhancements at zero additional charge.',
+            },
+            {
+              q: 'How does the in-browser AI Tutor find exact video timestamps?',
+              a: 'All video lectures are transcribed and chunked with millisecond-precision timestamps. We generate 1536-dimensional vector embeddings stored in PostgreSQL using pgvector. When you ask a question, Cosine Similarity search identifies the top matching transcript snippets and renders clickable video jump links.',
+            },
+            {
+              q: 'Is complete source code included with every course?',
+              a: 'Yes. Every masterclass comes with complete GitHub repositories including Docker Compose files, Kubernetes manifests, Helm charts, and automated integration tests.',
+            },
+            {
+              q: 'What is your refund policy?',
+              a: 'We offer a 30-Day 100% Money-Back Guarantee. If the course does not meet your engineering expectations, simply contact us within 30 days of purchase for a prompt, full refund with no questions asked.',
+            },
+          ].map((item, idx) => {
+            const isOpen = !!openFaq[idx];
+            return (
+              <div
+                key={idx}
+                className="glass-panel rounded-2xl overflow-hidden border border-slate-800/80 transition-all hover:border-slate-700"
+              >
+                <button
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-slate-800/30 transition-colors"
+                >
+                  <span className="text-sm sm:text-base font-bold text-white pr-4">
+                    {item.q}
+                  </span>
+                  <div className="w-6 h-6 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-400 shrink-0">
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-brand-400" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="px-6 pb-5 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
 
