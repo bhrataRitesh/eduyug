@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   BookOpen,
   Clock,
@@ -15,9 +15,10 @@ import {
   ShieldCheck,
   ArrowLeft,
   Share2,
+  AlertCircle,
 } from 'lucide-react';
 import { fetchApi } from '../../../lib/api';
-import { CourseDetail, LessonType } from '@eduyug/shared-types';
+import { CourseDetail, LessonType, CreateOrderResponse, VerifyPaymentResponse } from '@eduyug/shared-types';
 
 const DEMO_COURSE_DETAILS: Record<string, CourseDetail> = {
   'building-scalable-microservices-nodejs-kafka': {
@@ -103,10 +104,13 @@ In this course, we dive deep into production-ready distributed systems. You won'
 
 export default function CourseDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params?.slug as string;
   const [course, setCourse] = useState<CourseDetail | null>(null);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({ s1: true });
   const [loading, setLoading] = useState(true);
+  const [enrolling, setEnrolling] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCourse() {
@@ -126,6 +130,110 @@ export default function CourseDetailPage() {
 
   const toggleSection = (id: string) => {
     setOpenSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleEnroll = async () => {
+    if (!course) return;
+    setCheckoutError(null);
+    const token = localStorage.getItem('eduyug_token');
+    if (!token) {
+      router.push(`/auth/login?redirect=${encodeURIComponent(`/courses/${slug}`)}`);
+      return;
+    }
+
+    setEnrolling(true);
+
+    const { data: orderData, error: orderError } = await fetchApi<CreateOrderResponse>('/api/v1/commerce/orders', {
+      method: 'POST',
+      body: JSON.stringify({ courseId: course.id }),
+    });
+
+    if (orderError || !orderData) {
+      setEnrolling(false);
+      setCheckoutError(orderError || 'Failed to initiate order');
+      return;
+    }
+
+    const loadRazorpayScript = () => {
+      return new Promise<boolean>((resolve) => {
+        if ((window as any).Razorpay) return resolve(true);
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
+
+    const isLoaded = await loadRazorpayScript();
+
+    if (!isLoaded || !(window as any).Razorpay) {
+      // Fallback for simulated development: auto-verify mock payment
+      const { data: verifyData } = await fetchApi<VerifyPaymentResponse>('/api/v1/commerce/verify-payment', {
+        method: 'POST',
+        body: JSON.stringify({
+          orderId: orderData.orderId,
+          razorpayOrderId: orderData.razorpayOrderId,
+          razorpayPaymentId: `pay_sim_${Date.now()}`,
+          razorpaySignature: 'simulated_signature',
+        }),
+      });
+      setEnrolling(false);
+      if (verifyData?.success) {
+        const firstLesson = course.sections?.[0]?.lessons?.[0]?.id || 'start';
+        router.push(`/learn/${course.slug}/${firstLesson}`);
+      }
+      return;
+    }
+
+    const rawUser = localStorage.getItem('eduyug_user');
+    const userObj = rawUser ? JSON.parse(rawUser) : null;
+
+    const options = {
+      key: orderData.key,
+      amount: Math.round(parseFloat(orderData.amountInr) * 100),
+      currency: orderData.currency,
+      name: 'EduYug',
+      description: course.title,
+      order_id: orderData.razorpayOrderId,
+      prefill: {
+        email: userObj?.email || '',
+        name: userObj?.profile?.firstName || '',
+      },
+      theme: {
+        color: '#4F46E5',
+      },
+      handler: async function (response: any) {
+        const { data: verifyData, error: verifyError } = await fetchApi<VerifyPaymentResponse>(
+          '/api/v1/commerce/verify-payment',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              orderId: orderData.orderId,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            }),
+          }
+        );
+
+        setEnrolling(false);
+        if (verifyError || !verifyData?.success) {
+          setCheckoutError(verifyError || 'Payment verification failed');
+        } else {
+          const targetLesson = verifyData.firstLessonId || course.sections?.[0]?.lessons?.[0]?.id || 'start';
+          router.push(`/learn/${course.slug}/${targetLesson}`);
+        }
+      },
+      modal: {
+        ondismiss: function () {
+          setEnrolling(false);
+        },
+      },
+    };
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
   };
 
   if (loading) {
@@ -278,12 +386,20 @@ export default function CourseDetailPage() {
               </span>
             </div>
 
+            {checkoutError && (
+              <div className="mb-4 p-3 rounded-xl bg-accent-rose/10 border border-accent-rose/30 flex items-center gap-2 text-accent-rose text-xs">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{checkoutError}</span>
+              </div>
+            )}
+
             {/* CTA Button */}
             <button
-              onClick={() => alert(`Starting Razorpay checkout for ${course.title}...`)}
-              className="w-full py-3.5 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-500 shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2 mb-4"
+              onClick={handleEnroll}
+              disabled={enrolling}
+              className="w-full py-3.5 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-500 disabled:opacity-50 shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center gap-2 mb-4"
             >
-              <span>Enroll Now</span>
+              <span>{enrolling ? 'Initiating Checkout...' : 'Enroll Now'}</span>
             </button>
 
             <p className="text-center text-[11px] text-slate-400 mb-6">

@@ -62,12 +62,30 @@ export default function Navbar() {
 
           {user && (
             <Link
-              href="/studio"
+              href="/dashboard"
               className="text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
             >
-              <Sparkles className="w-4 h-4 text-accent-cyan" />
-              <span>Studio</span>
+              <BookOpen className="w-4 h-4 text-accent-emerald" />
+              <span>Dashboard</span>
             </Link>
+          )}
+
+          {user && (user.role === 'instructor' || user.role === 'admin') && (
+            <>
+              <Link
+                href="/studio"
+                className="text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
+              >
+                <Sparkles className="w-4 h-4 text-accent-cyan" />
+                <span>Studio</span>
+              </Link>
+              <Link
+                href="/studio/earnings"
+                className="text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-1.5"
+              >
+                <span>Earnings</span>
+              </Link>
+            </>
           )}
 
           {user ? (

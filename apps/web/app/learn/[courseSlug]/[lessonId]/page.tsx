@@ -112,6 +112,27 @@ export default function LessonClassroomPage() {
   const prevLesson = currentIdx > 0 ? allLessons[currentIdx - 1] : null;
   const nextLesson = currentIdx >= 0 && currentIdx < allLessons.length - 1 ? allLessons[currentIdx + 1] : null;
 
+  const lastPingRef = React.useRef<number>(0);
+
+  const handleVideoProgress = (currentSecond: number, duration: number) => {
+    if (!activeLesson) return;
+    const now = Date.now();
+    if (now - lastPingRef.current > 15000) {
+      lastPingRef.current = now;
+      fetchApi('/api/v1/learning/heartbeat', {
+        method: 'POST',
+        body: JSON.stringify({
+          lessonId: activeLesson.id,
+          currentSecond: Math.round(currentSecond),
+        }),
+      }).then(({ data }) => {
+        if ((data as any)?.isCompleted) {
+          setCompletedLessons((prev) => ({ ...prev, [activeLesson.id]: true }));
+        }
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#080C14] text-slate-100 flex flex-col">
       {/* Top Classroom Bar */}
@@ -155,9 +176,7 @@ export default function LessonClassroomPage() {
             <VideoPlayer
               src={videoSrc}
               seekTarget={seekTarget}
-              onTimeUpdate={(cur, dur) => {
-                // Future telemetry ping hook
-              }}
+              onTimeUpdate={handleVideoProgress}
             />
           )}
 
