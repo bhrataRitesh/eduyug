@@ -1,31 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Sparkles, BookOpen, Search, User, LogOut } from 'lucide-react';
-import { UserProfileResponse } from '@eduyug/shared-types';
+import { useAuth } from '../lib/auth';
 
 export default function Navbar() {
-  const [user, setUser] = useState<UserProfileResponse | null>(null);
-
-  useEffect(() => {
-    const rawUser = localStorage.getItem('eduyug_user');
-    if (rawUser) {
-      try {
-        setUser(JSON.parse(rawUser));
-      } catch {
-        setUser(null);
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('eduyug_token');
-    localStorage.removeItem('eduyug_refreshToken');
-    localStorage.removeItem('eduyug_user');
-    setUser(null);
-    window.location.href = '/';
-  };
+  const { user, isInstructor, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full glass-panel border-b border-white/10">
@@ -98,7 +79,7 @@ export default function Navbar() {
                   {user.profile?.firstName?.[0] || user.email[0].toUpperCase()}
                 </div>
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="p-1.5 text-slate-400 hover:text-accent-rose transition-colors"
                   title="Sign out"
                 >

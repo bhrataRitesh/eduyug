@@ -35,3 +35,7 @@ ENV/
 
 # Turborepo
 .turbo/
+
+# Testing & tool artifacts
+.playwright-mcp/
+*.tsbuildinfo
