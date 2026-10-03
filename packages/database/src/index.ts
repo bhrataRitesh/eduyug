@@ -1,8 +1,8 @@
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as schema from './schema';
+import * as schema from './schema/index';
 
-export * from './schema';
+export * from './schema/index';
 export { eq, and, or, desc, asc, sql } from 'drizzle-orm';
 
 let pool: Pool | null = null;
